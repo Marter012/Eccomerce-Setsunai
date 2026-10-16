@@ -1,758 +1,643 @@
-⚙️ Setsu API --- Backend
+<div align="center">
 
-**API REST para el catálogo de sushi artesanal de
+⚙️ Setsu API — Backend
 
-Setsu.**
+API REST para el catálogo de sushi artesanal de Setsu
 
-Python · FastAPI · Pydantic · MongoDB · Docker
+
+
+
+
+
+</div>
 
 📌 Descripción
 
-El backend de Setsu proporciona la API REST que utiliza el frontend para
+El backend de Setsu proporciona la API REST que utiliza el frontend para consultar y gestionar la información del catálogo. Administra piezas individuales de sushi, combinados, variantes generadas, bebidas y productos extra.
 
-consultar y gestionar la información del catálogo.
+FastAPI expone los endpoints HTTP, Pydantic valida los datos de las solicitudes y MongoDB almacena los recursos.
 
-Administra piezas individuales de sushi, combinados, variantes
+Alcance actual: la API administra el catálogo. El flujo de confirmación por WhatsApp no registra pedidos en esta API ni procesa pagos en línea.
 
-generadas, bebidas y productos extra.
+📑 Contenido
 
-La aplicación utiliza FastAPI para los endpoints HTTP, Pydantic para
+Funcionalidades
 
-validar solicitudes y MongoDB para persistir los datos.
+Tecnologías
+
+Estructura del proyecto
+
+Instalación
+
+Variables de entorno
+
+Ejecutar la API
+
+Documentación y salud
+
+Endpoints
+
+Modelos de datos
+
+Reglas de negocio
+
+MongoDB y mantenimiento
+
+Docker
+
+CORS y seguridad
+
+Solución de problemas
 
 ✨ Funcionalidades
 
-  API REST desarrollada con FastAPI.
+API REST desarrollada con FastAPI.
 
-  Integración con MongoDB.
+Integración con MongoDB.
 
-  Endpoints para piezas individuales de sushi.
+Endpoints para piezas individuales de sushi.
 
-  Endpoints para combinados.
+Endpoints para combinados y sus variantes.
 
-  Generación automática de variantes de combinados.
+Cálculos de precios y reglas de descuentos.
 
-  Cálculos de precios y reglas de descuentos.
+Gestión de bebidas y productos extra.
 
-  Gestión de bebidas y productos extra.
+Validación de nombres duplicados.
 
-  Validación de nombres duplicados.
+Generación de códigos internos.
 
-  Generación de códigos internos.
+Comprobación del estado del servicio.
 
-  Endpoint de comprobación del estado del servicio.
+Documentación interactiva con Swagger.
 
-  Documentación interactiva con Swagger.
-
-  Contenerización mediante Docker.
-
-Alcance actual: el backend gestiona los recursos del catálogo. El
-
-flujo de confirmación por WhatsApp no guarda actualmente pedidos ni
-
-procesa pagos mediante esta API.
+Contenerización mediante Docker.
 
 🧰 Tecnologías
 
-  Tecnología      Función
+<div align="center">
 
-  --------------- ----------------------------------
 
-  Python 3.11+    Lenguaje del backend
 
-  FastAPI         Framework para la API REST
 
-  Uvicorn         Servidor ASGI
 
-  Pydantic        Validación de datos
 
-  Motor           Acceso asíncrono a MongoDB
 
-  PyMongo         Herramientas de acceso a MongoDB
+</div>
 
-  python-dotenv   Variables de entorno
+Tecnología
 
-  MongoDB         Persistencia de datos
+Función
 
-  Docker          Contenerización
+Python
+
+Lenguaje del backend.
+
+FastAPI
+
+Framework de la API REST.
+
+Uvicorn
+
+Servidor ASGI.
+
+Pydantic
+
+Validación de datos.
+
+Motor / PyMongo
+
+Acceso a MongoDB según la implementación del proyecto.
+
+python-dotenv
+
+Carga de variables de entorno.
+
+MongoDB
+
+Persistencia de datos.
+
+Docker
+
+Contenerización de la aplicación.
 
 📂 Estructura del proyecto
 
-text
-
 Backend/
-
 ├── README.md
-
 ├── main.py
-
 ├── requirements.txt
-
 ├── Dockerfile
-
-│
-
 ├── dataBase/
-
-│   └── DBConfing.py
-
-│
-
+│   └── DBConfing.py
 ├── models/
-
 ├── routes/
-
 ├── services/
-
-│
-
 └── scripts/
+    └── rebuild_combo_variants.py
 
-    └── rebuild_combo_variants.py
+Componente
 
-Componentes principales
+Responsabilidad
 
-  -----------------------------------------------------------------------
+main.py
 
-  Componente                          Responsabilidad
+Aplicación FastAPI, registro de rutas y configuración CORS.
 
-  ----------------------------------- -----------------------------------
+dataBase/
 
-  main.py                           Aplicación FastAPI, registro de
+Conexión y configuración de MongoDB.
 
-                                      rutas y configuración CORS
+models/
 
-  dataBase/                         Conexión y configuración de MongoDB
+Modelos de solicitud y respuesta.
 
-  models/                           Modelos de solicitud y respuesta de
+routes/
 
-                                      Pydantic
+Definición de endpoints HTTP.
 
-  routes/                           Definición de endpoints HTTP
+services/
 
-  services/                         Lógica de negocio y operaciones con
+Lógica de negocio y operaciones de datos.
 
-                                      la base
+scripts/
 
-  scripts/                          Utilidades de mantenimiento y
-
-                                      gestión de datos
-
-  -----------------------------------------------------------------------
+Utilidades de mantenimiento.
 
 🚀 Instalación
 
 Requisitos previos
 
-  Python 3.11 o superior.
+Python 3.11 o superior.
 
-  pip.
+pip.
 
-  MongoDB local o MongoDB Atlas.
+MongoDB local o MongoDB Atlas.
 
-  Git.
+Git.
 
-  Docker, opcional.
+Docker, opcional.
 
 1. Crear un entorno virtual
 
 Desde la raíz del repositorio:
 
-bash
-
 cd Backend
-
 python -m venv .venv
 
 Activación en Windows PowerShell:
 
-powershell
-
-..venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.ps1
 
 Activación en Git Bash:
-
-bash
 
 source .venv/Scripts/activate
 
 En macOS o Linux:
 
-bash
-
 source .venv/bin/activate
 
-2. Instalar las dependencias
-
-bash
+2. Instalar dependencias
 
 pip install -r requirements.txt
 
-3. Configurar las variables de entorno
+🔐 Variables de entorno
 
 Creá un archivo .env dentro de Backend/:
 
-env
-
 MONGO_URL=mongodb://localhost:27017
-
 DB_NAME=SETSUNAI
-
 ALLOWED_ORIGINS=http://localhost:5173
-
 MONGO_SERVER_SELECTION_TIMEOUT_MS=10000
-
 MONGO_CONNECT_TIMEOUT_MS=10000
 
-Referencia de variables
+Variable
 
-  -------------------------------------------------------------------------------------------
+Descripción
 
-  Variable                              Descripción             Ejemplo
+Ejemplo
 
-  ------------------------------------- ----------------------- -----------------------------
+MONGO_URL
 
-  MONGO_URL                           URI de conexión a       mongodb://localhost:27017
+URI de conexión a MongoDB.
 
-                                        MongoDB                
+mongodb://localhost:27017
 
-  DB_NAME                             Nombre de la base de    SETSUNAI
+DB_NAME
 
-                                        datos                  
+Nombre de la base de datos.
 
-  ALLOWED_ORIGINS                     Orígenes permitidos     http\://localhost:5173
+SETSUNAI
 
-                                        separados por coma      
+ALLOWED_ORIGINS
 
-  MONGO_SERVER_SELECTION_TIMEOUT_MS   Tiempo máximo para      10000
+Orígenes de frontend permitidos, separados por coma si corresponde.
 
-                                        seleccionar un servidor
+http://localhost:5173
 
-  MONGO_CONNECT_TIMEOUT_MS            Tiempo máximo de        10000
+MONGO_SERVER_SELECTION_TIMEOUT_MS
 
-                                        conexión                
+Tiempo máximo para seleccionar un servidor.
 
-  -------------------------------------------------------------------------------------------
+10000
 
-Si utilizás MongoDB Atlas, reemplazá la URI local por la cadena de
+MONGO_CONNECT_TIMEOUT_MS
 
-conexión correspondiente.
+Tiempo máximo de conexión.
 
-No subas credenciales ni cadenas privadas al repositorio.
+10000
+
+Si utilizás MongoDB Atlas, reemplazá la URI local por la cadena de conexión correspondiente. No subas credenciales ni cadenas privadas al repositorio.
 
 ▶️ Ejecutar la API
 
-Con el entorno virtual activo, ejecutá:
-
-bash
+Con el entorno virtual activo:
 
 uvicorn main:app --reload --host 127.0.0.1 --port 8000
 
-La API debería estar disponible en:
-
-http\://localhost:8000
+La API debería estar disponible en http://localhost:8000.
 
 La opción --reload está pensada para desarrollo local.
 
-📖 Documentación y comprobación del estado
+📖 Documentación y estado del servicio
 
-FastAPI genera automáticamente la documentación interactiva.
+Cuando la API está en ejecución, las rutas habituales son:
 
-  --------------------------------------------------------------------------
+URL
 
-  URL                                    Descripción
+Descripción
 
-  -------------------------------------- -----------------------------------
+http://localhost:8000/
 
-  http\://localhost:8000/               Estado general del servicio
+Estado general del servicio, según la ruta configurada.
 
-  http\://localhost:8000/health         Comprobación de conexión con
+http://localhost:8000/health
 
-                                         MongoDB
+Comprobación de conexión con MongoDB, si está implementada en la versión desplegada.
 
-  http\://localhost:8000/docs           Swagger UI
+http://localhost:8000/docs
 
-  http\://localhost:8000/openapi.json   Especificación OpenAPI
+Documentación interactiva Swagger UI.
 
-  --------------------------------------------------------------------------
+http://localhost:8000/openapi.json
 
-El endpoint /health comprueba la conexión con MongoDB. Una respuesta
-
-satisfactoria indica que la base configurada responde a la comprobación.
+Especificación OpenAPI.
 
 🔌 Endpoints de la API
 
-🍣 Piezas individuales de sushi
+🍣 Piezas individuales
 
 Ruta base: /authPiece
 
-  Método   Endpoint                          Descripción
+Método
 
-  -------- --------------------------------- ---------------------------
+Endpoint
 
-  GET      /authPiece/pieces               Consultar piezas de sushi
+Descripción
 
-  POST     /authPiece/addPiece             Crear una pieza
+GET
 
-  PUT      /authPiece/updatePiece/{code}   Actualizar una pieza
+/authPiece/pieces
 
-El modelo de creación incluye:
+Consultar piezas de sushi.
 
-  name
+POST
 
-  description
+/authPiece/addPiece
 
-  img
+Crear una pieza.
 
-  costRoll
+PUT
 
-  category
+/authPiece/updatePiece/{code}
 
-  protein
+Actualizar una pieza.
 
-El servicio genera un código interno y calcula los precios para los
+El modelo de creación contempla campos como nombre, descripción, imagen, costo del rollo, categoría y proteína. El servicio genera un código interno y calcula los precios para los tamaños contemplados.
 
-tamaños contemplados.
-
-🍱 Combinados de sushi
+🍱 Combinados
 
 Ruta base: /authCombinedPieces
 
-  -----------------------------------------------------------------------------------------------------------
+Método
 
-  Método                  Endpoint                                                    Descripción
+Endpoint
 
-  ----------------------- ----------------------------------------------------------- -----------------------
+Descripción
 
-  GET                     /authCombinedPieces/combinedPieces                        Consultar combinados
+GET
 
-  GET                     /authCombinedPieces/comboVariants                         Consultar todas las
+/authCombinedPieces/combinedPieces
 
-                                                                                      variantes generadas
+Consultar combinados.
 
-  GET                     /authCombinedPieces/combinedPieces/variants/{comboCode}   Consultar variantes de
+GET
 
-                                                                                      un combinado
+/authCombinedPieces/comboVariants
 
-  POST                    /authCombinedPieces/addCombinedPieces                     Crear un combinado
+Consultar variantes generadas.
 
-  PUT                     /authCombinedPieces/updateCombinedPieces/{code}           Actualizar un combinado
+GET
 
-  -----------------------------------------------------------------------------------------------------------
+/authCombinedPieces/combinedPieces/variants/{comboCode}
 
-El modelo de creación incluye:
+Consultar variantes de un combinado.
 
-  name
+POST
 
-  img
+/authCombinedPieces/addCombinedPieces
 
-  typePieces
+Crear un combinado.
 
-  proteins
+PUT
 
-  description
+/authCombinedPieces/updateCombinedPieces/{code}
 
-El backend valida los códigos de las piezas referenciadas y genera las
+Actualizar un combinado.
 
-variantes según las reglas implementadas.
+El modelo contempla nombre, imagen, tipos de piezas, proteínas y descripción. El backend valida las piezas referenciadas y genera variantes según las reglas implementadas.
 
 🥤 Bebidas y productos extra
 
 Ruta base: /authBonusProduct
 
-  -----------------------------------------------------------------------------------------------
+Método
 
-  Método                  Endpoint                                        Descripción
+Endpoint
 
-  ----------------------- ----------------------------------------------- -----------------------
+Descripción
 
-  GET                     /authBonusProduct/bonusProduct                Consultar productos
+GET
 
-                                                                          activos
+/authBonusProduct/bonusProduct
 
-  POST                    /authBonusProduct/addBonusProduct             Crear un producto
+Consultar productos activos.
 
-                                                                          adicional
+POST
 
-  PUT                     /authBonusProduct/updateBonusProduct/{code}   Actualizar un producto
+/authBonusProduct/addBonusProduct
 
-                                                                          adicional
+Crear un producto adicional.
 
-  -----------------------------------------------------------------------------------------------
+PUT
 
-El modelo de creación incluye:
+/authBonusProduct/updateBonusProduct/{code}
 
-  name
+Actualizar un producto adicional.
 
-  description
-
-  img
-
-  type
-
-  price
-
-El campo type permite distinguir las bebidas de los demás extras.
+Los modelos contemplan nombre, descripción, imagen, tipo y precio. El campo type permite distinguir las bebidas de otros extras.
 
 🗄️ Modelos de datos
 
-`pieces
+pieces
 
-Las piezas individuales incluyen:
+Campo
 
-  Campo           Descripción
+Descripción
 
-  --------------- ----------------------------
+name
 
-  name          Nombre del producto
+Nombre del producto.
 
-  description   Descripción del producto
+description
 
-  img           URL de la imagen
+Descripción del producto.
 
-  costRoll      Costo del rollo
+img
 
-  category      Categoría del producto
+URL de la imagen.
 
-  protein       Ingrediente destacado
+costRoll
 
-  code          Código interno generado
+Costo del rollo.
 
-  state         Estado lógico del producto
+category
 
-  price_3p      Precio para 3 piezas
+Categoría del producto.
 
-  price_4p      Precio para 4 piezas
+protein
 
-  price_5p      Precio para 5 piezas
+Ingrediente destacado.
 
-  price_8p      Precio para 8 piezas
+code
 
-  price_16p     Precio para 16 piezas
+Código interno generado.
 
-`combinedPieces
+state
 
-Los combinados incluyen nombre, imagen, códigos de piezas referenciadas,
+Estado lógico del producto.
 
-proteínas, descripción, código generado y estado lógico.
+price_3p, price_4p, price_5p
 
-Las variantes se almacenan por separado en comboVariants.
+Precios para tamaños de 3, 4 y 5 piezas.
 
-`comboVariants
+price_8p, price_16p
 
-Las variantes contienen información como:
+Precios para tamaños de 8 y 16 piezas.
 
-  comboCode
+combinedPieces
 
-  take
+Los combinados incluyen nombre, imagen, códigos de las piezas referenciadas, proteínas, descripción, código generado y estado lógico. Las variantes se almacenan por separado en comboVariants.
 
-  perRoll
+comboVariants
 
-  pieces
+Entre los campos contemplados se encuentran:
 
-  totalPieces
+comboCode
 
-  basePrice
+take
 
-  finalPrice
+perRoll
 
-  discounted
+pieces
 
-  discountPercent
+totalPieces
 
-`bonusProduct
+basePrice
 
-Los productos adicionales incluyen nombre, descripción, imagen, tipo,
+finalPrice
 
-precio, código generado y estado lógico.
+discounted
 
-Los productos con state: false se excluyen de la consulta pública del
+discountPercent
 
-catálogo.
+bonusProduct
+
+Los productos adicionales incluyen nombre, descripción, imagen, tipo, precio, código generado y estado lógico. Los productos con state: false se excluyen de la consulta pública del catálogo según la implementación descrita.
 
 💰 Reglas de negocio
 
+Los valores de esta sección describen las reglas documentadas para el proyecto. Antes de modificarlas, contrastalos con la implementación vigente de los servicios.
+
 Cálculo de precios de piezas
 
-El servicio calcula un costo unitario aproximado dividiendo costRoll
+El servicio calcula un costo unitario aproximado dividiendo costRoll por 8. Los multiplicadores documentados son:
 
-por 8.
+Tamaño
 
-Los multiplicadores configurados actualmente son:
+Multiplicador
 
-  Tamaño        Multiplicador
+3 piezas
 
-  ----------- ---------------
+3 × 3.1
 
-  3 piezas          3 × 3.1
+4 piezas
 
-  4 piezas          4 × 3.1
+4 × 3.1
 
-  5 piezas          5 × 3.1
+5 piezas
 
-  8 piezas          8 × 3.0
+5 × 3.1
 
-  16 piezas        16 × 2.5
+8 piezas
 
-Los importes calculados se redondean hacia arriba al siguiente múltiplo
+8 × 3.0
 
-de 200.
+16 piezas
 
-Cuando se actualiza el costo del rollo, el servicio vuelve a calcular
+16 × 2.5
 
-los precios correspondientes.
+Los importes calculados se redondean hacia arriba al siguiente múltiplo de 200. Cuando se actualiza el costo del rollo, el servicio vuelve a calcular los precios correspondientes.
 
 Generación de variantes de combinados
 
-El servicio genera variantes a partir de las piezas elegibles y las
-
-reglas de selección implementadas.
-
-La lógica actual contempla selecciones de 3, 4 o 5 tipos de sushi, con 4
-
-u 8 piezas por tipo, y excluye la combinación de 3 tipos con 8 piezas
-
-por tipo.
-
-Las variantes disponibles dependen de los productos elegibles y de los
-
-precios requeridos.
+La lógica documentada contempla selecciones de 3, 4 o 5 tipos de sushi, con 4 u 8 piezas por tipo, y excluye la combinación de 3 tipos con 8 piezas por tipo. Las variantes dependen de los productos elegibles y de los precios requeridos.
 
 Descuentos de combinados
 
-Los umbrales de descuento actuales son:
+Cantidad total de piezas
 
-  Cantidad total de piezas     Descuento
+Descuento documentado
 
-  -------------------------- -----------
+8 o más
 
-  8 o más                            0 %
+0 %
 
-  16 o más                          10 %
+16 o más
 
-  24 o más                          15 %
+10 %
 
-  30 o más                          20 %
+24 o más
 
-El servicio aplica el umbral configurado más alto que corresponda y
+15 %
 
-redondea los precios base y final hacia arriba al siguiente múltiplo de
+30 o más
 
+20 %
 
-
-Estos valores describen la implementación actual. Revisá el servicio
-
-correspondiente antes de modificar las reglas comerciales.
+El servicio aplica el umbral que corresponda y redondea los precios base y final hacia arriba al siguiente múltiplo de 100, según las reglas documentadas.
 
 Validaciones
 
-El backend contempla validaciones para:
+El backend contempla validaciones para nombres duplicados, códigos de piezas referenciadas, cuerpos de solicitud mediante Pydantic y generación de códigos internos con reintentos ante colisiones cuando corresponde.
 
-  Nombres duplicados al crear productos.
+🗃️ MongoDB y mantenimiento
 
-  Nombres duplicados al actualizar registros existentes.
+El módulo dataBase/DBConfing.py administra la configuración de conexión a la base de datos. La aplicación inicializa el cliente durante el arranque y ejecuta las tareas de inicialización implementadas.
 
-  Códigos de piezas referenciadas en los combinados.
-
-  Cuerpos de solicitud mediante modelos Pydantic.
-
-  Códigos internos generados, con reintentos ante colisiones
-
-    detectadas cuando corresponde.
-
-🗃️ Configuración de MongoDB
-
-El módulo dataBase/DBConfing.py administra la configuración de
-
-conexión a la base de datos.
-
-La aplicación inicializa el cliente MongoDB durante el arranque y
-
-ejecuta tareas de inicialización, incluida la configuración de índices
-
-implementada.
-
-La versión revisada crea o verifica un índice único sobre
-
-bonusProduct.code.
-
-No debe suponerse que todas las colecciones tienen índices equivalentes
-
-sin revisar la configuración vigente.
-
-Mantenimiento de la base de datos
+El repositorio incluye el script scripts/rebuild_combo_variants.py.
 
 Antes de ejecutar scripts de mantenimiento:
 
- Realizá una copia de seguridad.
+Realizá una copia de seguridad.
 
- Verificá la URI y el nombre de la base configurada.
+Verificá la URI y el nombre de la base configurada.
 
- Revisá el comportamiento del script.
+Revisá el comportamiento del script.
 
- Probalo en una base de prueba cuando sea posible.
+Probalo en una base de prueba cuando sea posible.
 
- Verificá los datos resultantes.
-
-El repositorio incluye el script:
-
-scripts/rebuild_combo_variants.py
-
-Revisalo antes de ejecutarlo sobre datos de producción.
+Verificá los datos resultantes.
 
 🐳 Docker
 
-El backend incluye un Dockerfile basado en Python 3.11 slim.
-
 Desde Backend/, construí la imagen:
-
-bash
 
 docker build -t setsu-api .
 
-Ejecutá el contenedor:
+Ejemplo de ejecución:
 
-bash
+docker run --rm -p 8080:8080 \
+  -e MONGO_URL="TU_URI_MONGODB" \
+  -e DB_NAME="SETSUNAI" \
+  -e ALLOWED_ORIGINS="https://tu-dominio-frontend.com" \
+  setsu-api
 
-docker run --rm -p 8080:8080 
+Reemplazá los valores de ejemplo por la configuración real. Verificá el puerto expuesto por el Dockerfile y los requisitos del proveedor de hosting antes del despliegue.
 
+🌐 CORS y seguridad
 
-  -e MONGO_URL="TU_URI_MONGODB" 
-
-
-  -e DB_NAME="SETSUNAI" 
-
-
-  -e ALLOWED_ORIGINS="https://tu-dominio-frontend.com" 
-
-
-  setsu-api
-
-Reemplazá los valores de ejemplo por la configuración real.
-
-El contenedor está configurado para servir la API en el puerto 8080.
-
-Verificá los requisitos del proveedor de hosting si utiliza un puerto
-
-dinámico.
-
-🌐 Configuración de CORS
-
-El backend utiliza ALLOWED_ORIGINS para configurar los orígenes
-
-permitidos del frontend.
+El backend utiliza ALLOWED_ORIGINS para configurar los orígenes permitidos del frontend.
 
 Para desarrollo local:
 
-env
-
 ALLOWED_ORIGINS=http://localhost:5173
 
-En producción, configurá el dominio real del frontend.
+En producción, configurá el dominio real del frontend. Después de cambiar las variables de entorno, reiniciá o volvé a desplegar la API.
 
-Después de cambiar las variables de entorno, reiniciá o volvé a
+CORS es un mecanismo de seguridad del navegador; no reemplaza la autenticación ni la autorización.
 
-desplegar la API.
+Recomendaciones de seguridad
 
-CORS es un mecanismo de seguridad del navegador. No reemplaza la
+La implementación descrita no incluye autenticación ni autorización para los endpoints de creación y actualización revisados. Antes de exponer operaciones de escritura públicamente:
 
-autenticación ni la autorización.
+Implementá autenticación y autorización adecuadas.
 
-🔐 Consideraciones de seguridad
+Restringí los permisos de las credenciales de MongoDB.
 
-**La implementación actual no incluye autenticación ni autorización para
+Configurá CORS para los dominios conocidos.
 
-los endpoints de creación y actualización revisados.**
+No subas archivos .env ni cadenas privadas de conexión.
 
-Antes de exponer públicamente las operaciones de escritura:
+Validá los datos y aplicá las reglas de negocio en el servidor.
 
-  Implementá autenticación y autorización apropiadas.
+Evitá exponer información sensible en los errores.
 
-  Restringí los permisos de las credenciales de MongoDB.
+Mantené las dependencias actualizadas.
 
-  Configurá CORS para los dominios conocidos del frontend.
+Realizá copias de seguridad antes de operaciones de mantenimiento.
 
-  No subas archivos .env ni cadenas privadas de conexión.
-
-  Validá los datos y aplicá las reglas de negocio en el servidor.
-
-  Evitá exponer información sensible en los errores.
-
-  Mantené las dependencias actualizadas.
-
-  Realizá copias de seguridad antes de operaciones de mantenimiento.
-
-🛠️ Resolución de problemas
+🛠️ Solución de problemas
 
 La API no inicia
 
-  Confirmá que el entorno virtual esté activo.
+Confirmá que el entorno virtual esté activo.
 
-  Instalá las dependencias de requirements.txt.
+Instalá las dependencias de requirements.txt.
 
-  Verificá que MongoDB sea accesible.
+Verificá que MongoDB sea accesible.
 
-  Revisá el valor de MONGO_URL.
+Revisá MONGO_URL.
 
-  Consultá los registros de inicio por posibles errores de conexión o
-
-    inicialización de índices.
+Consultá los registros de inicio.
 
 Falla la comprobación de MongoDB
 
-Abrí:
-
-http\://localhost:8000/health
-
-Comprobá el estado de MongoDB, la conectividad de red, las credenciales
-
-y los permisos de la base.
+Si está disponible, abrí http://localhost:8000/health. Comprobá la conectividad, las credenciales y los permisos de la base.
 
 Errores de CORS
 
-Agregá el origen exacto del frontend a ALLOWED_ORIGINS y reiniciá la
-
-API.
+Agregá el origen exacto del frontend a ALLOWED_ORIGINS y reiniciá o volvé a desplegar la API.
 
 Los endpoints devuelven catálogos vacíos
 
-Verificá que las colecciones de MongoDB tengan datos y que la API
-
-consulte la base correcta.
+Verificá que las colecciones tengan datos y que la API consulte la base correcta.
 
 Error por nombre duplicado
 
-Los servicios correspondientes validan los nombres durante la creación y
-
-actualización. Revisá los productos existentes antes de volver a
-
-intentarlo.
+Revisá los productos existentes antes de volver a intentar la creación o actualización.
 
 📌 Alcance actual
 
-El backend proporciona la gestión del catálogo y los datos que necesita
+El backend proporciona la gestión del catálogo y los datos que necesita la aplicación de clientes. Las capacidades documentadas incluyen gestión de piezas, combinados y variantes, cálculo de precios y descuentos, gestión de bebidas y extras, persistencia en MongoDB y documentación de la API.
 
-la aplicación de clientes.
+La implementación descrita no incluye registro persistente de pedidos, procesamiento de pagos en línea ni un panel administrativo autenticado.
 
-Las capacidades implementadas incluyen:
+<div align="center">
 
-  Gestión de piezas individuales.
+SETSU API
+<sub>Gestión del catálogo y reglas de negocio para la experiencia Setsu.</sub>
 
-  Gestión de combinados y generación de variantes.
+Volver al README principal · Documentación del Frontend
 
-  Cálculo de precios y descuentos.
-
-  Gestión de bebidas y productos extra.
-
-  Persistencia en MongoDB.
-
-  Documentación de la API y comprobación de estado.
-
-La implementación actual no incluye registro persistente de pedidos,
-
-procesamiento de pagos en línea ni un panel administrativo autenticado.
-
-Setsu API
-Gestión del
-
-catálogo y reglas de negocio para la experiencia de sushi Setsu.
+</div>
